@@ -40,7 +40,13 @@ export const DepositModal = ({ visible, onClose, vault, usdcBalance, isConnected
   const fillQuick = (factor: number) => setAmount((usdcBalance * factor).toFixed(2));
 
   const runDeposit = async () => {
-    if (!vault || numericAmount <= 0 || inFlight) return;
+    if (!vault || !Number.isFinite(numericAmount) || numericAmount <= 0 || inFlight) {
+      if (!Number.isFinite(numericAmount)) {
+        setError('Enter a valid deposit amount.');
+        setStatus('failed');
+      }
+      return;
+    }
     if (!isConnected) {
       setError('Connect wallet before depositing.');
       setStatus('failed');
