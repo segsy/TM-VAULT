@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { DepositModal } from './src/components/DepositModal';
@@ -27,14 +27,20 @@ export default function App() {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [vaultData, setVaultData] = useState(seedVaults);
   const [history, setHistory] = useState<TransactionHistoryItem[]>([]);
+  const [displayUsdcBalance, setDisplayUsdcBalance] = useState(0);
 
   const positions = useMemo(() => computePositions(vaultData), [vaultData]);
+
+  useEffect(() => {
+    setDisplayUsdcBalance(usdcBalance);
+  }, [usdcBalance]);
 
   const handleDepositSuccess = (vaultId: Vault['id'], amountUsd: number, txHash: string, shares: number) => {
     const changedVault = vaultData.find((v) => v.id === vaultId);
     if (!changedVault) return;
 
     setVaultData((prev) => prev.map((v) => (v.id === vaultId ? { ...v, userBalanceUsd: v.userBalanceUsd + amountUsd } : v)));
+    setDisplayUsdcBalance((prev) => Math.max(0, prev - amountUsd));
     setHistory((prev) => [
       {
         id: `${vaultId}-${Date.now()}`,
@@ -69,7 +75,7 @@ export default function App() {
         <View style={styles.walletCard}>
           <Text style={styles.cardTitle}>Wallet</Text>
           <Text style={styles.label}>Address: {truncateAddress(walletAddress ?? undefined)}</Text>
-          <Text style={styles.label}>USDC: {usd(usdcBalance)}</Text>
+          <Text style={styles.label}>USDC: {usd(displayUsdcBalance)}</Text>
 
           {!connected ? (
             <Pressable style={styles.actionButton} onPress={connectWallet}>
@@ -105,7 +111,7 @@ export default function App() {
       <DepositModal
         visible={Boolean(selectedVault)}
         vault={selectedVault}
-        usdcBalance={usdcBalance}
+        usdcBalance={displayUsdcBalance}
         isConnected={connected}
         hasNetworkError={Boolean(networkError)}
         onClose={() => setSelectedVault(null)}
