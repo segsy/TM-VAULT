@@ -33,6 +33,20 @@ To force failure paths in the mock deposit call, use these amount endings:
 - Amount ending in `.01` cents ⇒ user rejected
 - Amount ending in `.02` cents ⇒ tx reverted
 
+## Environment variables
+
+Create a local env file before running:
+
+```bash
+cp .env.example .env
+```
+
+Supported variables:
+
+- `EXPO_PUBLIC_APP_NAME` - app header title
+- `EXPO_PUBLIC_HYPER_EVM_CHAIN_ID` - expected chain id for network checks
+- `EXPO_PUBLIC_DEMO_WALLET` - seeded demo wallet used by the mock connector
+
 ## Run
 
 ```bash

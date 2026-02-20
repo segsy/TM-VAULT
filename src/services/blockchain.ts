@@ -11,7 +11,7 @@ export class DepositError extends Error {
   }
 }
 
-export const HYPER_EVM_CHAIN_ID = 998;
+export const HYPER_EVM_CHAIN_ID = Number(process.env.EXPO_PUBLIC_HYPER_EVM_CHAIN_ID || 998);
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

@@ -10,6 +10,8 @@ import { computePositions, vaults as seedVaults } from './src/services/blockchai
 import { TransactionHistoryItem, Vault } from './src/types';
 import { truncateAddress, usd } from './src/utils/format';
 
+const APP_NAME = process.env.EXPO_PUBLIC_APP_NAME || 'TM Vault';
+
 export default function App() {
   const {
     connected,
@@ -63,7 +65,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.content} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}>
-        <Text style={styles.title}>TM Vault</Text>
+        <Text style={styles.title}>{APP_NAME}</Text>
         <Text style={styles.subtitle}>Mobile investor experience for HyperEVM vaults</Text>
 
         <View style={styles.walletCard}>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { detectChain, fetchUsdcBalance, HYPER_EVM_CHAIN_ID, switchNetwork } from '../services/blockchain';
 import { usePersistedState } from './usePersistedState';
 
-const DEMO_WALLET = '0xA16f2D52B4cB267D4A79fbef2F6f47dF212AABcd';
+const DEMO_WALLET = process.env.EXPO_PUBLIC_DEMO_WALLET || '0xA16f2D52B4cB267D4A79fbef2F6f47dF212AABcd';
 
 export const useWallet = () => {
   const persisted = usePersistedState<{ address: string | null }>('wallet', { address: null });
